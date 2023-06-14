@@ -1,0 +1,171 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 4,
+    "passes": 2,
+    "pending": 0,
+    "failures": 2,
+    "start": "2023-05-18T15:39:26.405Z",
+    "end": "2023-05-18T15:39:45.756Z",
+    "duration": 19351,
+    "testsRegistered": 4,
+    "passPercent": 50,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "517f9084-52fe-48ea-a970-33d0e82dcbdc",
+      "title": "",
+      "fullFile": "cypress/e2e/testAPI.cy.js",
+      "file": "cypress/e2e/testAPI.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "9319432b-8aac-49a5-a920-d3488826f187",
+          "title": "Test API",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "verify correct request and response",
+              "fullTitle": "Test API verify correct request and response",
+              "timedOut": null,
+              "duration": 6020,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.intercept('POST', 'https://api.realworld.io/api/articles/').as('postArticle');\ncy.contains('New Article').click();\ncy.get('input[formcontrolname=\"title\"]').type('new title');\ncy.get('input[formcontrolname=\"description\"]').type('new description');\ncy.get('textarea[formcontrolname=\"body\"]').type('new body');\ncy.get('input[placeholder=\"Enter tags\"]').type('newTags');\ncy.contains('Publish Article').click();\ncy.wait('@postArticle').then(xhr => {\n  console.log(xhr);\n  cy.wrap(xhr.response.statusCode).should('equal', 200);\n  cy.wrap(xhr.response.body.article.body).should('equal', 'new body');\n});",
+              "err": {
+                "message": "TypeError: Cannot read properties of undefined (reading 'body')",
+                "estack": "TypeError: Cannot read properties of undefined (reading 'body')\n    at Context.eval (webpack:///./cypress/e2e/testAPI.cy.js:21:40)",
+                "diff": null
+              },
+              "uuid": "2f3d0ff2-b4e6-44c4-bd97-de449ebc3bdc",
+              "parentUUID": "9319432b-8aac-49a5-a920-d3488826f187",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "verify popular tags are displayed",
+              "fullTitle": "Test API verify popular tags are displayed",
+              "timedOut": null,
+              "duration": 1166,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.intercept('GET', '*/tags', {\n  fixture: 'tags.json'\n}).as('tags');\ncy.fixture('tags.json').then(tags => {\n  cy.wrap(tags.tags).each(tag => {\n    cy.get('.tag-list').should('contain', tag);\n  });\n});",
+              "err": {},
+              "uuid": "2c3023ba-bf6f-42eb-8ed0-e7cf293e4c90",
+              "parentUUID": "9319432b-8aac-49a5-a920-d3488826f187",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "verify global feed and favs count",
+              "fullTitle": "Test API verify global feed and favs count",
+              "timedOut": null,
+              "duration": 6268,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.intercept('GET', '*/articles*', {\n  fixture: 'articles.json'\n}).as('articles');\ncy.contains('Global Feed').click();\ncy.fixture('articles.json').then(articles => {\n  const favsCount = articles.articles.map(article => article.favoritesCount);\n  cy.get('app-article-list app-article-preview button').each((favButton, index) => {\n    expect(favButton).to.contain(favsCount[index]);\n  });\n});\ncy.fixture('articles.json').then(file => {\n  const slug = file.articles[1].slug;\n  file.articles[1].favoritesCount = 6;\n  cy.intercept('POST', `*/articles/${slug}/favorite`, file).as('tagUpdated');\n});\ncy.get('app-article-list app-article-preview button').eq(1).click();\ncy.get('app-article-list app-article-preview button').eq(1).should('contain', 6);",
+              "err": {
+                "message": "CypressError: Timed out retrying after 4000ms: `cy.eq()` failed because it requires a DOM element or document.\n\nNo elements in the current DOM matched your query:\n\n  > cy.get(app-article-list app-article-preview button)",
+                "estack": "CypressError: Timed out retrying after 4000ms: `cy.eq()` failed because it requires a DOM element or document.\n\nNo elements in the current DOM matched your query:\n\n  > cy.get(app-article-list app-article-preview button)\n    at isElement (http://localhost:4200/__cypress/runner/cypress_runner.js:161426:70)\n    at validateType (http://localhost:4200/__cypress/runner/cypress_runner.js:161284:14)\n    at Object.isType (http://localhost:4200/__cypress/runner/cypress_runner.js:161315:7)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:151104:24)\n    at Object.subjectFn (http://localhost:4200/__cypress/runner/cypress_runner.js:159290:16)\n    at $Cy.verifyUpcomingAssertions (http://localhost:4200/__cypress/runner/cypress_runner.js:140514:31)\n    at onRetry (http://localhost:4200/__cypress/runner/cypress_runner.js:159281:15)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:18744:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:16018:29)\n    at whenStable (http://localhost:4200/__cypress/runner/cypress_runner.js:156168:65)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:155609:14)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:18744:23)\n    at Promise._settlePromiseFromHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:16679:31)\n    at Promise._settlePromise (http://localhost:4200/__cypress/runner/cypress_runner.js:16736:18)\n    at Promise._settlePromise0 (http://localhost:4200/__cypress/runner/cypress_runner.js:16781:10)\n    at Promise._settlePromises (http://localhost:4200/__cypress/runner/cypress_runner.js:16861:18)\n    at Promise._fulfill (http://localhost:4200/__cypress/runner/cypress_runner.js:16805:18)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:18419:46)\nFrom Your Spec Code:\n    at Context.eval (webpack:///./cypress/e2e/testAPI.cy.js:53:64)",
+                "diff": null
+              },
+              "uuid": "c16283e8-f82f-4279-bd61-4ce790868bcc",
+              "parentUUID": "9319432b-8aac-49a5-a920-d3488826f187",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "login and create an article by api",
+              "fullTitle": "Test API login and create an article by api",
+              "timedOut": null,
+              "duration": 5550,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('@authToken').then(authToken => {\n  cy.request({\n    method: 'POST',\n    url: 'https://api.realworld.io/api/articles/',\n    headers: {\n      authorization: `Token ${authToken}`\n    },\n    body: {\n      \"article\": {\n        \"tagList\": [],\n        \"title\": \"new article1\",\n        \"description\": \"test1\",\n        \"body\": \"test\"\n      }\n    }\n  }).then(response => {\n    expect(response.status).to.equal(200);\n  });\n  cy.contains('Global Feed').click();\n  cy.get('app-article-preview a.preview-link').first().click();\n  cy.contains('Delete Article').first().click().then(() => {\n    cy.request({\n      method: 'GET',\n      url: 'https://api.realworld.io/api/articles?limit=10&offset=0',\n      headers: {\n        authorization: `Token ${authToken}`\n      }\n    }).then(response => {\n      expect(response.status).to.equal(200);\n      console.log(response.body.articles);\n      expect(response.body.articles[0].title).not.to.equal('new article1');\n    });\n  });\n});",
+              "err": {},
+              "uuid": "15b5e9c4-9cc5-43f9-ae44-c770d97fef1a",
+              "parentUUID": "9319432b-8aac-49a5-a920-d3488826f187",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "2c3023ba-bf6f-42eb-8ed0-e7cf293e4c90",
+            "15b5e9c4-9cc5-43f9-ae44-c770d97fef1a"
+          ],
+          "failures": [
+            "2f3d0ff2-b4e6-44c4-bd97-de449ebc3bdc",
+            "c16283e8-f82f-4279-bd61-4ce790868bcc"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 19004,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}
